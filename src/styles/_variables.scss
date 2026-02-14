@@ -1,0 +1,129 @@
+// ─── Color Palette
+
+// Brand
+$color-primary:       #0079bf;
+$color-primary-dark:  #005a8e;
+$color-primary-light: #1a8ed1;
+
+// Neutral
+$color-white:         #ffffff;
+$color-gray-50:       #f7f8f9;
+$color-gray-100:      #f1f2f4;
+$color-gray-200:      #e2e5ea;
+$color-gray-300:      #cdd0d8;
+$color-gray-400:      #9ba3af;
+$color-gray-500:      #6b7280;
+$color-gray-600:      #4b5563;
+$color-gray-700:      #374151;
+$color-gray-800:      #1f2937;
+$color-gray-900:      #111827;
+
+// Semantic
+$color-danger:        #eb5a46;
+$color-danger-dark:   #c9372c;
+$color-success:       #61bd4f;
+$color-warning:       #ffab4a;
+$color-info:          #00aecc;
+
+// Board Header
+$color-board-overlay: rgba(0, 0, 0, 0.25);
+
+// Surfaces
+$color-surface:       $color-white;
+$color-surface-hover: $color-gray-50;
+$color-surface-dim:   rgba(255, 255, 255, 0.15);
+
+// Text
+$color-text-primary:   $color-gray-900;
+$color-text-secondary: $color-gray-500;
+$color-text-muted:     $color-gray-400;
+$color-text-on-dark:   rgba(255, 255, 255, 0.9);
+$color-text-on-dark-muted: rgba(255, 255, 255, 0.7);
+
+// List
+$color-list-bg:        $color-gray-100;
+$color-list-header:    $color-gray-100;
+
+// Card
+$color-card-bg:        $color-white;
+$color-card-shadow:    rgba(9, 30, 66, 0.25);
+$color-card-shadow-hover: rgba(9, 30, 66, 0.35);
+
+// Border
+$color-border:        $color-gray-200;
+$color-border-focus:  $color-primary;
+
+// Typography
+$font-family-base:    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+                      Ubuntu, Cantarell, sans-serif;
+$font-family-mono:    'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+
+$font-size-xs:    0.6875rem;  // 11px
+$font-size-sm:    0.75rem;    // 12px
+$font-size-base:  0.875rem;   // 14px
+$font-size-md:    1rem;       // 16px
+$font-size-lg:    1.125rem;   // 18px
+$font-size-xl:    1.25rem;    // 20px
+$font-size-2xl:   1.5rem;     // 24px
+$font-size-3xl:   1.875rem;   // 30px
+
+$font-weight-normal:   400;
+$font-weight-medium:   500;
+$font-weight-semibold: 600;
+$font-weight-bold:     700;
+
+$line-height-tight:  1.25;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.625;
+
+// Spacing
+$spacing-1:   0.25rem;   // 4px
+$spacing-2:   0.5rem;    // 8px
+$spacing-3:   0.75rem;   // 12px
+$spacing-4:   1rem;      // 16px
+$spacing-5:   1.25rem;   // 20px
+$spacing-6:   1.5rem;    // 24px
+$spacing-8:   2rem;      // 32px
+$spacing-10:  2.5rem;    // 40px
+$spacing-12:  3rem;      // 48px
+$spacing-16:  4rem;      // 64px
+
+// Border Radius
+$radius-sm:   3px;
+$radius-base: 6px;
+$radius-md:   8px;
+$radius-lg:   12px;
+$radius-xl:   16px;
+$radius-full: 9999px;
+
+// Shadows
+$shadow-xs:    0 1px 2px rgba(9, 30, 66, 0.1);
+$shadow-sm:    0 1px 3px rgba(9, 30, 66, 0.15), 0 1px 2px rgba(9, 30, 66, 0.1);
+$shadow-card:  0 1px 3px $color-card-shadow, 0 0 0 1px rgba(9, 30, 66, 0.08);
+$shadow-card-hover: 0 4px 12px $color-card-shadow-hover, 0 0 0 1px rgba(9, 30, 66, 0.12);
+$shadow-modal: 0 20px 60px rgba(9, 30, 66, 0.45), 0 0 0 1px rgba(9, 30, 66, 0.1);
+$shadow-dropdown: 0 8px 24px rgba(9, 30, 66, 0.3);
+
+// Transitions
+$transition-fast:   0.1s ease;
+$transition-base:   0.15s ease;
+$transition-slow:   0.2s ease;
+$transition-spring: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// Z-index Scale
+$z-dropdown:   100;
+$z-overlay:    200;
+$z-modal:      300;
+$z-tooltip:    400;
+
+// Layout
+$navbar-height:   48px;
+$list-width:      272px;
+$card-min-height: 36px;
+
+// Breakpoints
+$bp-sm:   640px;
+$bp-md:   768px;
+$bp-lg:   1024px;
+$bp-xl:   1280px;
+$bp-2xl:  1536px;

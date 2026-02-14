@@ -1,0 +1,295 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: $spacing-5;
+  padding: $spacing-5;
+
+  @include respond-below('sm') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  min-width: 0;
+}
+
+.titleSection {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: $spacing-3;
+  align-items: start;
+}
+
+.titleIcon {
+  color: $color-text-muted;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.titleContent {
+  min-width: 0;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  line-height: $line-height-tight;
+  word-break: break-word;
+  cursor: pointer;
+  padding: $spacing-1;
+  border-radius: $radius-sm;
+  transition: background-color $transition-base;
+  margin: -$spacing-1;
+
+  &:hover {
+    background-color: $color-gray-100;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.titleInput {
+  @include input-base;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  resize: none;
+  width: 100%;
+}
+
+.listLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $spacing-1;
+  padding-left: $spacing-1;
+}
+
+.listName {
+  font-weight: $font-weight-medium;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.sectionIcon {
+  color: $color-text-muted;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include flex($gap: $spacing-2);
+}
+
+.commentCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 $spacing-1;
+  background: $color-gray-200;
+  border-radius: $radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+}
+
+.editBtn {
+  margin-left: auto;
+}
+
+.descContent {
+  padding: $spacing-3;
+  border-radius: $radius-base;
+  cursor: pointer;
+  transition: background-color $transition-base;
+  min-height: 56px;
+  margin-left: calc(20px + #{$spacing-3});
+
+  &:hover {
+    background-color: $color-gray-100;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+    border-radius: $radius-base;
+  }
+}
+
+.descText {
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  line-height: $line-height-relaxed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.descPlaceholder {
+  font-size: $font-size-base;
+  color: $color-text-muted;
+}
+
+.descEditArea {
+  margin-left: calc(20px + #{$spacing-3});
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.descInput {
+  @include input-base;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.descActions {
+  @include flex($gap: $spacing-2);
+}
+
+.addComment {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: $spacing-3;
+  align-items: flex-start;
+}
+
+.commentAvatar {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-full;
+  background: $color-primary;
+  color: $color-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  flex-shrink: 0;
+}
+
+.commentInputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.commentInput {
+  @include input-base;
+  resize: none;
+  transition: border-color $transition-base, box-shadow $transition-base,
+              min-height $transition-base;
+  min-height: 36px;
+}
+
+.commentActions {
+  @include flex($gap: $spacing-2);
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.commentItem {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: $spacing-3;
+  align-items: flex-start;
+  animation: slide-up $transition-base;
+}
+
+.commentBody {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.commentMeta {
+  @include flex($gap: $spacing-2, $align: center);
+}
+
+.commentAuthor {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.commentTime {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.commentText {
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.deleteComment {
+  @include button-reset;
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  align-self: flex-start;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-danger;
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding-top: $spacing-2;
+
+  @include respond-below('sm') {
+    display: none;
+  }
+}
+
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.metaLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metaValue {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}

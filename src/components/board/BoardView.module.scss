@@ -1,0 +1,101 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.boardCanvas {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: calc(100vh - #{$navbar-height});
+  @include scrollbar(8px, transparent, rgba(255, 255, 255, 0.3));
+
+  & > * {
+    flex-shrink: 0;
+  }
+}
+
+.addListBtn {
+  @include button-reset;
+  @include flex($gap: $spacing-2, $align: center);
+  width: $list-width;
+  padding: $spacing-3 $spacing-4;
+  background: rgba(255, 255, 255, 0.22);
+  color: $color-white;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-md;
+  backdrop-filter: blur(4px);
+  transition: background-color $transition-base;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.32);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+.addListForm {
+  width: $list-width;
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: $spacing-3;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  flex-shrink: 0;
+  box-shadow: $shadow-sm;
+  animation: slide-down $transition-base;
+}
+
+.addListInput {
+  @include input-base;
+}
+
+.addListActions {
+  @include flex($gap: $spacing-2, $align: center);
+}
+
+.addListSubmit {
+  @include button-base;
+  background-color: $color-primary;
+  color: $color-white;
+  padding: $spacing-2 $spacing-3;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+
+  &:hover:not(:disabled) {
+    background-color: $color-primary-dark;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.addListCancel {
+  @include button-reset;
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-base;
+  color: $color-text-muted;
+  transition: background-color $transition-base, color $transition-base;
+
+  &:hover {
+    background-color: $color-gray-100;
+    color: $color-text-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}

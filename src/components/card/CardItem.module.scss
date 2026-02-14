@@ -1,0 +1,81 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.card {
+  border-radius: $radius-base;
+  cursor: grab;
+  position: relative;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &--dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+
+    .cardInner {
+      box-shadow: none;
+    }
+  }
+
+  &--overlay {
+    cursor: grabbing;
+
+    .cardInner {
+      box-shadow: $shadow-card-hover;
+      transform: rotate(2deg) scale(1.02);
+    }
+  }
+}
+
+.cardInner {
+  @include card-base;
+  padding: $spacing-2 $spacing-3;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    .editHint {
+      opacity: 1;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.title {
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  word-break: break-word;
+  margin-bottom: $spacing-1;
+}
+
+.badges {
+  @include flex($gap: $spacing-2);
+  flex-wrap: wrap;
+  margin-top: $spacing-2;
+}
+
+.commentBadge {
+  @include flex($gap: $spacing-1, $align: center);
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  padding: 2px $spacing-1;
+  border-radius: $radius-sm;
+  background: $color-gray-100;
+}
+
+.descIndicator {
+  color: $color-text-muted;
+  margin-top: $spacing-1;
+  font-size: $font-size-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+}

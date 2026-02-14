@@ -1,0 +1,78 @@
+'use client';
+import React from 'react';
+import Link from 'next/link';
+import { useInlineEdit } from '@/hooks/useInlineEdit';
+import { useBoardStore } from '@/stores/boardStore';
+import styles from './Navbar.module.scss';
+
+interface NavbarProps {
+  boardTitle?: string;
+  boardId?:    string;
+}
+
+export function Navbar({ boardTitle, boardId }: NavbarProps) {
+  const updateBoard = useBoardStore((s) => s.updateBoard);
+
+  const {
+    isEditing,
+    value,
+    inputRef,
+    startEditing,
+    handleChange,
+    handleKeyDown,
+    handleBlur,
+  } = useInlineEdit({
+    initialValue: boardTitle ?? '',
+    onSave: (newTitle) => {
+      if (boardId) updateBoard({ id: boardId, title: newTitle });
+    },
+  });
+
+  return (
+    <header className={styles.navbar} role="banner">
+      <div className={styles.left}>
+        <Link href="/" className={styles.logo} aria-label="Trello Clone - Go to boards">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <rect x="2" y="2" width="8" height="14" rx="2" />
+            <rect x="14" y="2" width="8" height="9" rx="2" />
+          </svg>
+          <span className={styles.logoText}>Trello</span>
+        </Link>
+
+        {boardTitle && (
+          <>
+            <span className={styles.separator} aria-hidden="true">/</span>
+
+            {isEditing ? (
+              <input
+                ref={inputRef as React.RefObject<HTMLInputElement>}
+                className={styles.titleInput}
+                value={value}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
+                maxLength={100}
+                aria-label="Edit board title"
+              />
+            ) : (
+              <button
+                className={styles.titleBtn}
+                onClick={startEditing}
+                title="Click to edit board title"
+                aria-label={`Board title: ${boardTitle}. Click to edit.`}
+              >
+                {boardTitle}
+              </button>
+            )}
+          </>
+        )}
+      </div>
+
+      <nav className={styles.right} aria-label="Main navigation">
+        <Link href="/" className={styles.navLink}>
+          Boards
+        </Link>
+      </nav>
+    </header>
+  );
+}

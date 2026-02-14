@@ -1,0 +1,187 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.column {
+  width: $list-width;
+  flex-shrink: 0;
+  touch-action: none;
+
+  &--dragging {
+    opacity: 0.5;
+  }
+
+  &--overlay {
+    .inner {
+      box-shadow: $shadow-dropdown;
+      transform: rotate(2deg);
+    }
+  }
+}
+
+.inner {
+  background-color: $color-list-bg;
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - #{$navbar-height} - #{$spacing-8 * 2});
+  transition: box-shadow $transition-base;
+}
+
+.header {
+  @include flex-between;
+  padding: $spacing-3 $spacing-3 $spacing-2;
+  cursor: grab;
+  flex-shrink: 0;
+  gap: $spacing-2;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.title {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+  cursor: pointer;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-sm;
+  margin: -$spacing-1 -$spacing-2;
+  transition: background-color $transition-base;
+  margin-right: $spacing-2;
+
+  &:hover {
+    background-color: $color-gray-200;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.titleInput {
+  @include input-base;
+  font-weight: $font-weight-semibold;
+  flex: 1;
+  min-width: 0;
+}
+
+.cardCount {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-muted;
+  background: $color-gray-200;
+  padding: 2px $spacing-2;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+}
+
+.deleteBtn {
+  @include button-reset;
+  @include flex-center;
+  width: 28px;
+  height: 28px;
+  border-radius: $radius-sm;
+  color: $color-text-muted;
+  flex-shrink: 0;
+  transition: background-color $transition-base, color $transition-base;
+  opacity: 0;
+
+  .header:hover & {
+    opacity: 1;
+  }
+
+  &:hover {
+    background-color: $color-gray-200;
+    color: $color-danger;
+  }
+
+  &:focus-visible {
+    opacity: 1;
+    outline: 2px solid $color-danger;
+    outline-offset: 2px;
+  }
+}
+
+.cardsArea {
+  @include scrollbar;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 $spacing-2;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: $spacing-2;
+}
+
+.emptyZone {
+  min-height: 24px;
+  border-radius: $radius-base;
+  border: 2px dashed $color-gray-300;
+  opacity: 0.5;
+}
+
+.addCardForm {
+  padding: $spacing-2;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  flex-shrink: 0;
+}
+
+.addCardInput {
+  @include input-base;
+  resize: none;
+  min-height: 56px;
+}
+
+.addCardActions {
+  @include flex($gap: $spacing-2, $align: center);
+}
+
+.cancelBtn {
+  @include button-reset;
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-base;
+  color: $color-text-muted;
+  transition: background-color $transition-base, color $transition-base;
+
+  &:hover {
+    background-color: $color-gray-200;
+    color: $color-text-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.addCardBtn {
+  @include button-reset;
+  @include flex($gap: $spacing-2, $align: center);
+  width: 100%;
+  padding: $spacing-2 $spacing-3;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  border-radius: 0 0 $radius-md $radius-md;
+  transition: background-color $transition-base, color $transition-base;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: $color-text-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: -2px;
+  }
+}

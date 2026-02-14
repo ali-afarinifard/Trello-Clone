@@ -1,0 +1,98 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.navbar {
+  @include m.flex-between;
+  height: v.$navbar-height;
+  padding: 0 v.$spacing-4;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: v.$z-dropdown;
+  flex-shrink: 0;
+}
+
+.left { @include m.flex($gap: v.$spacing-3, $align: center); min-width: 0; }
+
+.logo {
+  @include m.flex($gap: v.$spacing-2, $align: center);
+  color: v.$color-white;
+  font-weight: v.$font-weight-bold;
+  font-size: v.$font-size-md;
+  padding: v.$spacing-1 v.$spacing-2;
+  border-radius: v.$radius-base;
+  transition: background-color v.$transition-base;
+  flex-shrink: 0;
+
+  &:hover { background: rgba(255, 255, 255, 0.15); }
+  &:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.8); outline-offset: 2px; }
+}
+
+.logoText { @include m.respond-below('sm') { display: none; } }
+
+.separator {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: v.$font-weight-normal;
+  user-select: none;
+}
+
+// Board title — view mode (clickable button)
+.titleBtn {
+  @include m.button-reset;
+  font-size: v.$font-size-base;
+  font-weight: v.$font-weight-semibold;
+  color: v.$color-white;
+  @include m.text-ellipsis;
+  max-width: 300px;
+  padding: v.$spacing-1 v.$spacing-2;
+  border-radius: v.$radius-base;
+  cursor: pointer;
+  transition: background-color v.$transition-base;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+
+  @include m.respond-below('sm') { max-width: 140px; }
+}
+
+// Board title — edit mode (input)
+.titleInput {
+  font-size: v.$font-size-base;
+  font-weight: v.$font-weight-semibold;
+  color: v.$color-white;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: v.$radius-base;
+  padding: v.$spacing-1 v.$spacing-2;
+  max-width: 300px;
+  width: 220px;
+  outline: none;
+
+  &:focus {
+    border-color: v.$color-white;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @include m.respond-below('sm') { max-width: 140px; width: 140px; }
+}
+
+.right { @include m.flex($gap: v.$spacing-2, $align: center); }
+
+.navLink {
+  font-size: v.$font-size-sm;
+  font-weight: v.$font-weight-medium;
+  color: rgba(255, 255, 255, 0.9);
+  padding: v.$spacing-1 v.$spacing-3;
+  border-radius: v.$radius-base;
+  transition: background-color v.$transition-base;
+
+  &:hover { background: rgba(255, 255, 255, 0.15); }
+  &:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.8); outline-offset: 2px; }
+}

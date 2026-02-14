@@ -1,0 +1,215 @@
+@import 'variables';
+
+// Responsive Media Queries
+@mixin respond-to($bp) {
+  @if $bp == 'sm' {
+    @media (min-width: #{$bp-sm}) { @content; }
+  } @else if $bp == 'md' {
+    @media (min-width: #{$bp-md}) { @content; }
+  } @else if $bp == 'lg' {
+    @media (min-width: #{$bp-lg}) { @content; }
+  } @else if $bp == 'xl' {
+    @media (min-width: #{$bp-xl}) { @content; }
+  } @else if $bp == '2xl' {
+    @media (min-width: #{$bp-2xl}) { @content; }
+  }
+}
+
+@mixin respond-below($bp) {
+  @if $bp == 'sm' {
+    @media (max-width: #{$bp-sm - 1px}) { @content; }
+  } @else if $bp == 'md' {
+    @media (max-width: #{$bp-md - 1px}) { @content; }
+  } @else if $bp == 'lg' {
+    @media (max-width: #{$bp-lg - 1px}) { @content; }
+  }
+}
+
+// Flexbox
+@mixin flex($direction: row, $align: center, $justify: flex-start, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  @if $gap != 0 { gap: $gap; }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Typography
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Buttons
+@mixin button-reset {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+@mixin button-base {
+  @include button-reset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  border-radius: $radius-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  line-height: 1;
+  transition: background-color $transition-base, color $transition-base,
+              box-shadow $transition-base, transform $transition-fast;
+  white-space: nowrap;
+  user-select: none;
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+}
+
+// Form Inputs
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-2 $spacing-3;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  background-color: $color-white;
+  border: 2px solid $color-border;
+  border-radius: $radius-base;
+  transition: border-color $transition-base, box-shadow $transition-base;
+  outline: none;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+  }
+
+  &:disabled {
+    background-color: $color-gray-100;
+    cursor: not-allowed;
+  }
+}
+
+// Scrollbar
+@mixin scrollbar($width: 8px, $track: transparent, $thumb: $color-gray-300) {
+  scrollbar-width: thin;
+  scrollbar-color: $thumb $track;
+
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $thumb;
+    border-radius: $radius-full;
+    border: 2px solid $track;
+  }
+}
+
+// Card
+@mixin card-base {
+  background: $color-card-bg;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+  transition: box-shadow $transition-base, transform $transition-base;
+
+  &:hover {
+    box-shadow: $shadow-card-hover;
+  }
+}
+
+// Overlay / Modal Backdrop
+@mixin overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: $z-overlay;
+}
+
+// Focus Ring
+@mixin focus-ring($color: $color-primary) {
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: 2px;
+  }
+}
+
+// Visually Hidden
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Skeleton Loading
+@mixin skeleton {
+  background: linear-gradient(
+    90deg,
+    $color-gray-200 25%,
+    $color-gray-100 50%,
+    $color-gray-200 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  border-radius: $radius-base;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
