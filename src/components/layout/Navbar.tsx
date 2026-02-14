@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useInlineEdit } from '@/hooks/useInlineEdit';
 import { useBoardStore } from '@/stores/boardStore';
 import styles from './Navbar.module.scss';
+import { Logo } from '../ui/Logo';
 
 interface NavbarProps {
   boardTitle?: string;
@@ -32,10 +33,7 @@ export function Navbar({ boardTitle, boardId }: NavbarProps) {
     <header className={styles.navbar} role="banner">
       <div className={styles.left}>
         <Link href="/" className={styles.logo} aria-label="Trello Clone - Go to boards">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <rect x="2" y="2" width="8" height="14" rx="2" />
-            <rect x="14" y="2" width="8" height="9" rx="2" />
-          </svg>
+          <Logo />
           <span className={styles.logoText}>Trello</span>
         </Link>
 
