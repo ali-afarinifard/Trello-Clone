@@ -47,56 +47,72 @@ npm run dev
 
 ```
 src/
-├── app/                          # Next.js App Router pages
-│   ├── layout.tsx                # Root layout + StoreHydration
-│   ├── page.tsx                  # Boards list (home)
+├── app/
+│   ├── layout.tsx                    # Root layout + StoreHydration
+│   ├── page.tsx                      # Boards list (home)
+│   ├── page.module.scss
 │   └── board/[id]/
-│       └── page.tsx              # Single board view
+│       ├── page.tsx                  # Single board view
+│       └── page.module.scss
 ├── components/
-│   ├── ui/                       # Reusable base components
+│   ├── ui/                           # Reusable base components (folder-per-component)
 │   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.module.scss
+│   │   │   └── index.ts
 │   │   ├── Input/
+│   │   │   ├── Input.tsx
+│   │   │   ├── Input.module.scss
+│   │   │   └── index.ts
 │   │   └── Modal/
-│   ├── board/                    # Board-specific components
-│   │   ├── BoardView/            # Main board canvas with DnD
-│   │   ├── BoardCard/            # Board preview card
-│   │   └── CreateBoardModal/
+│   │       ├── Modal.tsx
+│   │       ├── Modal.module.scss
+│   │       └── index.ts
+│   ├── board/
+│   │   ├── BoardCard.tsx             # Board preview card
+│   │   ├── BoardCard.module.scss
+│   │   ├── BoardView.tsx             # Main board canvas with DnD
+│   │   ├── BoardView.module.scss
+│   │   ├── CreateBoardModal.tsx
+│   │   ├── CreateBoardModal.module.scss
+│   │   └── index.ts
 │   ├── list/
-│   │   └── ListColumn/           # List with sortable cards
+│   │   ├── ListColumn.tsx            # List with sortable cards
+│   │   ├── ListColumn.module.scss
+│   │   └── index.ts
 │   ├── card/
-│   │   ├── CardItem/             # Draggable card
-│   │   └── CardDetailModal/
-│   └── layout/
-│       ├── Navbar/
-│       └── StoreHydration/       # SSR-safe localStorage loader
+│   │   ├── CardItem.tsx              # Draggable card
+│   │   ├── CardItem.module.scss
+│   │   ├── CardDetailModal.tsx
+│   │   ├── CardDetailModal.module.scss
+│   │   └── index.ts
+│   ├── layout/
+│   │   ├── Navbar.tsx
+│   │   ├── Navbar.module.scss
+│   │   └── index.ts
+│   └── storeHydration/
+│       └── StoreHydration.tsx        # SSR-safe localStorage loader
 ├── hooks/
-│   ├── useBoard.ts               # Board derived state
-│   ├── useDragAndDrop.ts         # All DnD logic
-│   ├── useModal.ts               # Modal state management
-│   └── useInlineEdit.ts          # Inline text editing
+│   ├── useBoard.ts                   # Board derived state
+│   ├── useDragAndDrop.ts             # All DnD logic
+│   ├── useModal.ts                   # Modal state management
+│   └── useInlineEdit.ts              # Inline text editing
 ├── stores/
-│   └── boardStore.ts             # Zustand store (single source of truth)
+│   └── boardStore.ts                 # Zustand store (single source of truth)
 ├── services/
-│   └── storageService.ts         # localStorage abstraction
+│   └── storageService.ts             # localStorage abstraction
 ├── types/
-│   └── index.ts                  # All TypeScript interfaces
+│   └── index.ts                      # All TypeScript interfaces
 ├── utils/
-│   └── index.ts                  # Pure utility functions
+│   └── index.ts                      # Pure utility functions
 └── styles/
-    ├── _variables.scss           # Design tokens
-    ├── _mixins.scss              # Reusable patterns
-    ├── _reset.scss               # CSS reset
-    └── globals.scss              # Global styles
+    ├── _variables.scss               # Design tokens
+    ├── _mixins.scss                  # Reusable patterns
+    ├── _reset.scss                   # CSS reset
+    └── globals.scss                  # Global styles
 ```
 
-Each component follows a **folder-per-component** pattern:
-
-```
-components/ui/Button/
-├── Button.tsx          # Component logic
-├── Button.module.scss  # Scoped styles
-└── index.ts            # Re-export for clean imports
-```
+`ui/` components use a **folder-per-component** pattern (component + styles + barrel export). Other components colocate `.tsx` and `.module.scss` in their category folder.
 
 ---
 
@@ -154,12 +170,29 @@ _mixins.scss     →  reusable patterns (flex helpers, breakpoints, text-ellipsi
 _reset.scss      →  baseline normalization
 ```
 
-`sassOptions.includePaths` in `next.config.ts` allows any component to import partials without relative path traversal:
+`sassOptions.includePaths` in `next.config.js` allows any component to import partials without relative path traversal:
 
 ```scss
 @use '@/styles/variables' as v;
 @use '@/styles/mixins'   as m;
 ```
+
+---
+
+## Why Next.js 14
+
+Next.js 14 was a deliberate choice over the latest version, based on three practical considerations:
+
+**Stability over novelty**
+Next.js 14 is battle-tested in production across thousands of projects. Its edge cases are well-documented, its bugs are patched, and its behavior is predictable. Adopting a major version the week it ships means inheriting undiscovered issues — a risk that doesn't make sense for a project where reliability matters.
+
+**Ecosystem compatibility**
+Key dependencies in this project — `@dnd-kit`, `zustand`, and the broader React ecosystem — have been validated against Next.js 14. With Next.js 16 and React 19, several libraries had not yet published stable compatibility updates at the time this project was built. Chasing the latest framework version while pinning older libraries creates a fragile dependency graph.
+
+**The App Router is fully mature in v14**
+Everything this project requires — Server Components, Client Components, dynamic routing, layout nesting, and streaming — is fully supported in Next.js 14. Version 16 offers incremental improvements, but nothing that would meaningfully change the architecture of this application.
+
+> Choosing a technology version based on stability and ecosystem readiness — rather than release date — is standard practice in production engineering. The migration path to Next.js 16 is straightforward when the ecosystem catches up.
 
 ---
 
