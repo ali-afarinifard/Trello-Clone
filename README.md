@@ -35,7 +35,7 @@ A professional Trello-like project management app built with modern web technolo
 # Install dependencies
 npm install
 
-# Run development server
+# Run development
 npm run dev
 
 # Open http://localhost:3000
@@ -69,19 +69,19 @@ src/
 │   │       ├── Modal.module.scss
 │   │       └── index.ts
 │   ├── board/
-│   │   ├── BoardCard.tsx             # Board preview card
+│   │   ├── BoardCard.tsx
 │   │   ├── BoardCard.module.scss
-│   │   ├── BoardView.tsx             # Main board canvas with DnD
+│   │   ├── BoardView.tsx
 │   │   ├── BoardView.module.scss
 │   │   ├── CreateBoardModal.tsx
 │   │   ├── CreateBoardModal.module.scss
 │   │   └── index.ts
 │   ├── list/
-│   │   ├── ListColumn.tsx            # List with sortable cards
+│   │   ├── ListColumn.tsx
 │   │   ├── ListColumn.module.scss
 │   │   └── index.ts
 │   ├── card/
-│   │   ├── CardItem.tsx              # Draggable card
+│   │   ├── CardItem.tsx
 │   │   ├── CardItem.module.scss
 │   │   ├── CardDetailModal.tsx
 │   │   ├── CardDetailModal.module.scss
