@@ -1,3 +1,5 @@
+import type { BoardState } from '@/types';
+
 const STORAGE_KEYS = {
   BOARD_STATE: 'trello_clone_board_state',
   VERSION: 'trello_clone_version',
@@ -42,7 +44,6 @@ export function removeFromStorage(key: string): void {
   }
 }
 
-import type { BoardState } from '@/types';
 
 export function loadBoardState(): BoardState | null {
   return getFromStorage<BoardState>(STORAGE_KEYS.BOARD_STATE);
