@@ -1,10 +1,14 @@
-import { useState, useCallback } from 'react';
-import type { DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
-import { useBoardStore } from '@/stores/boardStore';
-import type { ID } from '@/types';
+import { useState, useCallback } from "react";
+import type {
+  DragEndEvent,
+  DragStartEvent,
+  DragOverEvent,
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import { useBoardStore } from "@/stores/boardStore";
+import type { ID } from "@/types";
 
-type DragType = 'CARD' | 'LIST' | null;
+type DragType = "CARD" | "LIST" | null;
 
 interface ActiveDragState {
   id: ID;
@@ -32,15 +36,11 @@ export function useDragAndDrop(boardId: ID): UseDragAndDropReturn {
 
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
-      const { active } = event;
-      const activeId = active.id as ID;
-
-      const isCard = activeId in cards;
-      const type: DragType = isCard ? 'CARD' : 'LIST';
-
+      const activeId = event.active.id as ID;
+      const type: DragType = activeId in cards ? "CARD" : "LIST";
       setActiveDrag({ id: activeId, type });
     },
-    [cards]
+    [cards],
   );
 
   const handleDragOver = useCallback(
@@ -64,29 +64,19 @@ export function useDragAndDrop(boardId: ID): UseDragAndDropReturn {
 
       if (isOverCard) {
         const overCard = cards[overId];
-        if (!overCard) return;
+        if (!overCard || activeCard.listId === overCard.listId) return;
 
-        // Moving to a different list
-        if (activeCard.listId !== overCard.listId) {
-          const targetListCards = getListCards(overCard.listId);
-          const overIndex = targetListCards.findIndex((c) => c.id === overId);
-          const newOrder = overIndex >= 0 ? overIndex : targetListCards.length;
-          moveCard(activeId, overCard.listId, newOrder);
-
-          // Reorder destination list
-          const newDestCards = [...targetListCards];
-          newDestCards.splice(newOrder, 0, { ...activeCard, listId: overCard.listId });
-          reorderCards(
-            overCard.listId,
-            newDestCards.map((c) => c.id)
-          );
-        }
+        // Single action: move card to target list at the correct position
+        const targetListCards = getListCards(overCard.listId);
+        const overIndex = targetListCards.findIndex((c) => c.id === overId);
+        const newOrder = overIndex >= 0 ? overIndex : targetListCards.length;
+        moveCard(activeId, overCard.listId, newOrder);
       } else if (isOverList && activeCard.listId !== overId) {
         // Dropping onto an empty list
         moveCard(activeId, overId, 0);
       }
     },
-    [cards, lists, getListCards, moveCard, reorderCards]
+    [cards, lists, getListCards, moveCard],
   );
 
   const handleDragEnd = useCallback(
@@ -101,19 +91,17 @@ export function useDragAndDrop(boardId: ID): UseDragAndDropReturn {
 
       if (activeId === overId) return;
 
-      const isActiveCard = activeId in cards;
       const isActiveList = activeId in lists;
+      const isActiveCard = activeId in cards;
 
       if (isActiveList) {
-        // Reorder lists
         const boardLists = getBoardLists(boardId);
         const listIds = boardLists.map((l) => l.id);
         const oldIndex = listIds.indexOf(activeId);
         const newIndex = listIds.indexOf(overId);
 
         if (oldIndex !== -1 && newIndex !== -1) {
-          const reordered = arrayMove(listIds, oldIndex, newIndex);
-          reorderLists(boardId, reordered);
+          reorderLists(boardId, arrayMove(listIds, oldIndex, newIndex));
         }
         return;
       }
@@ -128,17 +116,22 @@ export function useDragAndDrop(boardId: ID): UseDragAndDropReturn {
         const newIndex = cardIds.indexOf(overId);
 
         if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-          const reordered = arrayMove(cardIds, oldIndex, newIndex);
-          reorderCards(card.listId, reordered);
+          reorderCards(card.listId, arrayMove(cardIds, oldIndex, newIndex));
         }
       }
     },
-    [cards, lists, getBoardLists, getListCards, reorderLists, reorderCards, boardId]
+    [
+      cards,
+      lists,
+      getBoardLists,
+      getListCards,
+      reorderLists,
+      reorderCards,
+      boardId,
+    ],
   );
 
-  const handleDragCancel = useCallback(() => {
-    setActiveDrag(null);
-  }, []);
+  const handleDragCancel = useCallback(() => setActiveDrag(null), []);
 
   return {
     activeDrag,
