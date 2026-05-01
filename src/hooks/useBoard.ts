@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useBoardStore } from '@/stores/boardStore';
 import type { BoardWithLists, ID } from '@/types';
+import { sortByOrder } from '@/utils';
 
 interface UseBoardReturn {
   board: ReturnType<typeof useBoardStore.getState>['boards'][string] | undefined;
@@ -11,20 +12,19 @@ interface UseBoardReturn {
 
 export function useBoard(boardId: ID): UseBoardReturn {
   const boards = useBoardStore((state) => state.boards);
-  const lists = useBoardStore((state) => state.lists);
-  const cards = useBoardStore((state) => state.cards);
-  const getBoardLists = useBoardStore((state) => state.getBoardLists);
-  const getListCards = useBoardStore((state) => state.getListCards);
+  const lists  = useBoardStore((state) => state.lists);
+  const cards  = useBoardStore((state) => state.cards);
 
   const board = boards[boardId];
 
   const listsWithCards = useMemo(() => {
-    const boardLists = getBoardLists(boardId);
+    const boardLists = sortByOrder(
+      Object.values(lists).filter((l) => l.boardId === boardId)
+    );
     return boardLists.map((list) => ({
       ...list,
-      cards: getListCards(list.id),
+      cards: sortByOrder(Object.values(cards).filter((c) => c.listId === list.id)),
     }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boardId, lists, cards]);
 
   const cardCount = useMemo(
