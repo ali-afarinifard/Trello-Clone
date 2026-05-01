@@ -1,17 +1,16 @@
-'use client';
-
-import React, { memo } from 'react';
-import Link from 'next/link';
-import { X, LayoutList, AlignLeft } from 'lucide-react';
-import type { Board } from '@/types';
-import { BOARD_COLORS } from '@/types';
-import styles from './BoardCard.module.scss';
+"use client";
+import React, { memo, useCallback } from "react";
+import Link from "next/link";
+import { X, LayoutList, AlignLeft } from "lucide-react";
+import type { Board } from "@/types";
+import { BOARD_COLORS } from "@/types";
+import styles from "./BoardCard.module.scss";
 
 interface BoardCardProps {
-  board:      Board;
-  cardCount:  number;
-  listCount:  number;
-  onDelete:   (boardId: string) => void;
+  board: Board;
+  cardCount: number;
+  listCount: number;
+  onDelete: (boardId: string) => void;
 }
 
 const getBoardBackground = (colorKey: string): string => {
@@ -19,7 +18,20 @@ const getBoardBackground = (colorKey: string): string => {
   return colorEntry?.value ?? BOARD_COLORS[0].value;
 };
 
-export const BoardCard = memo(function BoardCard({ board, cardCount, listCount, onDelete }: BoardCardProps) {
+export const BoardCard = memo(function BoardCard({
+  board,
+  cardCount,
+  listCount,
+  onDelete,
+}: BoardCardProps) {
+  const handleDelete = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      onDelete(board.id);
+    },
+    [board.id, onDelete],
+  );
+
   return (
     <div className={styles.card}>
       <Link
@@ -49,7 +61,7 @@ export const BoardCard = memo(function BoardCard({ board, cardCount, listCount, 
 
       <button
         className={styles.deleteBtn}
-        onClick={(e) => { e.preventDefault(); onDelete(board.id); }}
+        onClick={handleDelete}
         aria-label={`Delete board: ${board.title}`}
         title="Delete board"
       >

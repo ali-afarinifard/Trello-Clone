@@ -170,6 +170,13 @@
   @include flex($gap: $spacing-2);
 }
 
+.descTextarea {
+  @include input-base;
+  resize: vertical;
+  min-height: 80px;
+  width: 100%;
+}
+
 .addComment {
   display: grid;
   grid-template-columns: 32px 1fr;

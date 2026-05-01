@@ -1,25 +1,20 @@
 'use client';
 import React, { useCallback, useState } from 'react';
 import {
-  DndContext,
-  DragOverlay,
-  PointerSensor,
-  KeyboardSensor,
-  useSensor,
-  useSensors,
-  closestCorners,
+  DndContext, DragOverlay, PointerSensor,
+  KeyboardSensor, useSensor, useSensors, closestCorners,
 } from '@dnd-kit/core';
 import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { createPortal } from 'react-dom';
 import { Plus, X } from 'lucide-react';
 
-import { ListColumn } from '@/components/list/ListColumn/ListColumn';
-import { CardItem } from '@/components/card/CardItem/CardItem';
+import { ListColumn }      from '@/components/list/ListColumn/ListColumn';
+import { CardItem }        from '@/components/card/CardItem/CardItem';
 import { CardDetailModal } from '@/components/card/CardDetailModal/CardDetailModal';
-import { useDragAndDrop } from '@/hooks/useDragAndDrop';
-import { useModal } from '@/hooks/useModal';
-import { useBoard } from '@/hooks/useBoard';
-import { useBoardStore } from '@/stores/boardStore';
+import { useDragAndDrop }  from '@/hooks/useDragAndDrop';
+import { useModal }        from '@/hooks/useModal';
+import { useBoard }        from '@/hooks/useBoard';
+import { useBoardStore }   from '@/stores/boardStore';
 import type { ID } from '@/types';
 import styles from './BoardView.module.scss';
 
@@ -27,10 +22,16 @@ interface AddListFormProps {
   boardId: ID;
 }
 
+const NOOP = () => {};
+
 function AddListForm({ boardId }: AddListFormProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState('');
+  const [title,  setTitle]  = useState('');
   const createList = useBoardStore((state) => state.createList);
+
+  const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  }, []);
 
   const handleSubmit = useCallback(() => {
     const trimmed = title.trim();
@@ -39,27 +40,24 @@ function AddListForm({ boardId }: AddListFormProps) {
     setTitle('');
   }, [title, createList, boardId]);
 
+  const handleOpen = useCallback(() => setIsOpen(true), []);
+
+  const handleCancel = useCallback(() => {
+    setIsOpen(false);
+    setTitle('');
+  }, []);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleSubmit();
-      }
-      if (e.key === 'Escape') {
-        setIsOpen(false);
-        setTitle('');
-      }
+      if (e.key === 'Enter')  { e.preventDefault(); handleSubmit(); }
+      if (e.key === 'Escape') { handleCancel(); }
     },
-    [handleSubmit]
+    [handleSubmit, handleCancel]
   );
 
   if (!isOpen) {
     return (
-      <button
-        className={styles.addListBtn}
-        onClick={() => setIsOpen(true)}
-        aria-label="Add new list"
-      >
+      <button className={styles.addListBtn} onClick={handleOpen} aria-label="Add new list">
         <Plus size={16} />
         Add another list
       </button>
@@ -71,7 +69,7 @@ function AddListForm({ boardId }: AddListFormProps) {
       <input
         className={styles.addListInput}
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={handleTitleChange}
         onKeyDown={handleKeyDown}
         placeholder="Enter list title..."
         autoFocus
@@ -85,14 +83,7 @@ function AddListForm({ boardId }: AddListFormProps) {
         >
           Add list
         </button>
-        <button
-          className={styles.addListCancel}
-          onClick={() => {
-            setIsOpen(false);
-            setTitle('');
-          }}
-          aria-label="Cancel"
-        >
+        <button className={styles.addListCancel} onClick={handleCancel} aria-label="Cancel">
           <X size={16} />
         </button>
       </div>
@@ -108,43 +99,25 @@ export function BoardView({ boardId }: BoardViewProps) {
   const { listsWithCards } = useBoard(boardId);
   const cards = useBoardStore((state) => state.cards);
 
-  const {
-    activeDrag,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-    handleDragCancel,
-  } = useDragAndDrop(boardId);
+  const { activeDrag, handleDragStart, handleDragOver, handleDragEnd, handleDragCancel } =
+    useDragAndDrop(boardId);
 
   const { isOpen, selectedId, openModal, closeModal } = useModal();
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   const listIds = listsWithCards.map((l) => l.id);
 
-  const renderDragOverlay = () => {
+  const renderDragOverlay = useCallback(() => {
     if (!activeDrag) return null;
 
     if (activeDrag.type === 'CARD') {
       const card = cards[activeDrag.id];
       if (!card) return null;
-      return (
-        <CardItem
-          card={card}
-          onOpenDetail={() => {}}
-          onEditTitle={() => {}}
-          isDragOverlay
-        />
-      );
+      return <CardItem card={card} onOpenDetail={NOOP} isDragOverlay />;
     }
 
     if (activeDrag.type === 'LIST') {
@@ -154,14 +127,14 @@ export function BoardView({ boardId }: BoardViewProps) {
         <ListColumn
           list={listWithCards}
           cards={listWithCards.cards}
-          onOpenCardDetail={() => {}}
+          onOpenCardDetail={NOOP}
           isDragOverlay
         />
       );
     }
 
     return null;
-  };
+  }, [activeDrag, cards, listsWithCards]);
 
   return (
     <>
@@ -190,18 +163,12 @@ export function BoardView({ boardId }: BoardViewProps) {
 
         {typeof document !== 'undefined' &&
           createPortal(
-            <DragOverlay dropAnimation={null}>
-              {renderDragOverlay()}
-            </DragOverlay>,
+            <DragOverlay dropAnimation={null}>{renderDragOverlay()}</DragOverlay>,
             document.body
           )}
       </DndContext>
 
-      <CardDetailModal
-        cardId={selectedId}
-        isOpen={isOpen}
-        onClose={closeModal}
-      />
+      <CardDetailModal cardId={selectedId} isOpen={isOpen} onClose={closeModal} />
     </>
   );
 }

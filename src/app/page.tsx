@@ -1,13 +1,12 @@
 'use client';
-
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Plus } from 'lucide-react';
 import { BoardCard } from '@/components/board/BoardCard/BoardCard';
 import { CreateBoardModal } from '@/components/board/CreateBoardModal/CreateBoardModal';
 import { useModal } from '@/hooks/useModal';
 import { useBoardStore } from '@/stores/boardStore';
-import styles from './page.module.scss';
 import { Navbar } from '@/components/layout';
+import styles from './page.module.scss';
 
 export default function HomePage() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -25,10 +24,15 @@ export default function HomePage() {
     [boards]
   );
 
-  const getBoardStats = (boardId: string) => ({
-    listCount: Object.values(lists).filter((l) => l.boardId === boardId).length,
-    cardCount: Object.values(cards).filter((c) => c.boardId === boardId).length,
-  });
+  const getBoardStats = useCallback(
+    (boardId: string) => ({
+      listCount: Object.values(lists).filter((l) => l.boardId === boardId).length,
+      cardCount: Object.values(cards).filter((c) => c.boardId === boardId).length,
+    }),
+    [lists, cards]
+  );
+
+  const handleOpenModal = useCallback(() => openModal(), [openModal]);
 
   return (
     <div className={styles.page}>
@@ -61,7 +65,7 @@ export default function HomePage() {
 
             <button
               className={styles.createBtn}
-              onClick={() => openModal()}
+              onClick={handleOpenModal}
               aria-label="Create new board"
             >
               <Plus size={20} />

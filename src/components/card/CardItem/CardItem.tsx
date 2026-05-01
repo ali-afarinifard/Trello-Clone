@@ -1,5 +1,5 @@
 "use client";
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MessageSquare, AlignLeft } from "lucide-react";
@@ -42,6 +42,20 @@ export const CardItem = memo(function CardItem({
     .filter(Boolean)
     .join(" ");
 
+  const handleClick = useCallback(() => {
+    onOpenDetail(card.id);
+  }, [card.id, onOpenDetail]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onOpenDetail(card.id);
+      }
+    },
+    [card.id, onOpenDetail],
+  );
+
   return (
     <div
       ref={setNodeRef}
@@ -52,16 +66,11 @@ export const CardItem = memo(function CardItem({
     >
       <div
         className={styles.cardInner}
-        onClick={() => onOpenDetail(card.id)}
+        onClick={handleClick}
         role="button"
         tabIndex={0}
         aria-label={`Open card: ${card.title}`}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onOpenDetail(card.id);
-          }
-        }}
+        onKeyDown={handleKeyDown}
       >
         <p className={styles.title}>{card.title}</p>
 

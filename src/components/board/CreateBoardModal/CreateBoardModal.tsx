@@ -1,40 +1,48 @@
+// CreateBoardModal/CreateBoardModal.tsx
 'use client';
 import React, { useState, useCallback } from 'react';
-import { Modal } from '@/components/ui/Modal';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
+import { Modal }         from '@/components/ui/Modal';
+import { Button }        from '@/components/ui/Button';
+import { Input }         from '@/components/ui/Input';
 import { useBoardStore } from '@/stores/boardStore';
-import { BOARD_COLORS } from '@/types';
+import { BOARD_COLORS }  from '@/types';
 import type { BoardColorKey } from '@/types';
 import styles from './CreateBoardModal.module.scss';
+import { ColorSwatch } from './ColorSwatch/ColorSwatch';
 
 interface CreateBoardModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen:     boolean;
+  onClose:    () => void;
   onCreated?: (boardId: string) => void;
 }
 
 export function CreateBoardModal({ isOpen, onClose, onCreated }: CreateBoardModalProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title,         setTitle]         = useState('');
+  const [description,   setDescription]   = useState('');
   const [selectedColor, setSelectedColor] = useState<BoardColorKey>('ocean');
-  const [error, setError] = useState('');
+  const [error,         setError]         = useState('');
 
   const createBoard = useBoardStore((state) => state.createBoard);
+
+  const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    if (error) setError('');
+  }, [error]);
+
+  const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+  }, []);
+
+  const handleColorSelect = useCallback((key: BoardColorKey) => {
+    setSelectedColor(key);
+  }, []);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-
       const trimmedTitle = title.trim();
-      if (!trimmedTitle) {
-        setError('Board title is required');
-        return;
-      }
-      if (trimmedTitle.length > 100) {
-        setError('Title must be 100 characters or less');
-        return;
-      }
+      if (!trimmedTitle) { setError('Board title is required'); return; }
+      if (trimmedTitle.length > 100) { setError('Title must be 100 characters or less'); return; }
 
       const board = createBoard({
         title: trimmedTitle,
@@ -42,12 +50,10 @@ export function CreateBoardModal({ isOpen, onClose, onCreated }: CreateBoardModa
         color: selectedColor,
       });
 
-      // Reset form
       setTitle('');
       setDescription('');
       setSelectedColor('ocean');
       setError('');
-
       onClose();
       onCreated?.(board.id);
     },
@@ -68,7 +74,6 @@ export function CreateBoardModal({ isOpen, onClose, onCreated }: CreateBoardModa
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Create board" size="sm">
       <div className={styles.container}>
-        {/* Color Preview */}
         <div
           className={styles.preview}
           style={{ background: selectedColorValue }}
@@ -83,27 +88,13 @@ export function CreateBoardModal({ isOpen, onClose, onCreated }: CreateBoardModa
           <p className={styles.colorLabel}>Background</p>
           <div className={styles.colorGrid} role="radiogroup" aria-label="Choose board color">
             {BOARD_COLORS.map((color) => (
-              <button
+              <ColorSwatch
                 key={color.key}
-                type="button"
-                className={[
-                  styles.colorSwatch,
-                  selectedColor === color.key ? styles['colorSwatch--selected'] : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                style={{ background: color.value }}
-                onClick={() => setSelectedColor(color.key as BoardColorKey)}
-                aria-label={`Color: ${color.key}`}
-                aria-pressed={selectedColor === color.key}
-                title={color.key}
-              >
-                {selectedColor === color.key && (
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="white">
-                    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" />
-                  </svg>
-                )}
-              </button>
+                colorKey={color.key as BoardColorKey}
+                colorValue={color.value}
+                isSelected={selectedColor === color.key}
+                onSelect={handleColorSelect}
+              />
             ))}
           </div>
         </div>
@@ -112,10 +103,7 @@ export function CreateBoardModal({ isOpen, onClose, onCreated }: CreateBoardModa
           <Input
             label="Board title *"
             value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              if (error) setError('');
-            }}
+            onChange={handleTitleChange}
             placeholder="My awesome board"
             error={error}
             maxLength={100}
@@ -124,14 +112,12 @@ export function CreateBoardModal({ isOpen, onClose, onCreated }: CreateBoardModa
           />
 
           <div className={styles.field}>
-            <label className={styles.fieldLabel} htmlFor="board-desc">
-              Description
-            </label>
+            <label className={styles.fieldLabel} htmlFor="board-desc">Description</label>
             <textarea
               id="board-desc"
               className={styles.textarea}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={handleDescriptionChange}
               placeholder="What is this board for?"
               rows={2}
               maxLength={300}

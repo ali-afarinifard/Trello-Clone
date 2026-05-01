@@ -56,6 +56,31 @@ export const ListColumn = memo(function ListColumn({
     onSave: (value) => updateList({ id: list.id, title: value }),
   });
 
+  const handleTitleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") titleEdit.startEditing();
+    },
+    [titleEdit],
+  );
+
+  const handleNewCardTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setNewCardTitle(e.target.value);
+    },
+    [],
+  );
+
+  const handleDeleteList = useCallback(() => {
+    deleteList(list.id);
+  }, [deleteList, list.id]);
+
+  const handleOpenAddCard = useCallback(() => setIsAddingCard(true), []);
+
+  const handleCancelAddCard = useCallback(() => {
+    setIsAddingCard(false);
+    setNewCardTitle("");
+  }, []);
+
   const handleAddCard = useCallback(() => {
     const trimmed = newCardTitle.trim();
     if (!trimmed) {
@@ -73,11 +98,10 @@ export const ListColumn = memo(function ListColumn({
         handleAddCard();
       }
       if (e.key === "Escape") {
-        setIsAddingCard(false);
-        setNewCardTitle("");
+        handleCancelAddCard();
       }
     },
-    [handleAddCard],
+    [handleAddCard, handleCancelAddCard],
   );
 
   const cardIds = cards.map((c) => c.id);
@@ -112,7 +136,7 @@ export const ListColumn = memo(function ListColumn({
               onClick={titleEdit.startEditing}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && titleEdit.startEditing()}
+              onKeyDown={handleTitleKeyDown}
             >
               {list.title}
             </h3>
@@ -122,7 +146,7 @@ export const ListColumn = memo(function ListColumn({
 
           <button
             className={styles.deleteBtn}
-            onClick={() => deleteList(list.id)}
+            onClick={handleDeleteList}
             aria-label={`Delete ${list.title}`}
             title="Delete list"
           >
@@ -155,7 +179,7 @@ export const ListColumn = memo(function ListColumn({
             <textarea
               className={styles.addCardInput}
               value={newCardTitle}
-              onChange={(e) => setNewCardTitle(e.target.value)}
+              onChange={handleNewCardTitleChange}
               onKeyDown={handleAddCardKeyDown}
               placeholder="Enter a title for this card..."
               rows={3}
@@ -167,20 +191,14 @@ export const ListColumn = memo(function ListColumn({
               </Button>
               <button
                 className={styles.cancelBtn}
-                onClick={() => {
-                  setIsAddingCard(false);
-                  setNewCardTitle("");
-                }}
+                onClick={handleCancelAddCard}
               >
                 <X size={16} />
               </button>
             </div>
           </div>
         ) : (
-          <button
-            className={styles.addCardBtn}
-            onClick={() => setIsAddingCard(true)}
-          >
+          <button className={styles.addCardBtn} onClick={handleOpenAddCard}>
             <Plus size={14} />
             Add a card
           </button>
