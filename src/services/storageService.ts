@@ -44,14 +44,54 @@ export function removeFromStorage(key: string): void {
   }
 }
 
+type MigrationFn = (old: unknown) => BoardState;
 
-export function loadBoardState(): BoardState | null {
-  return getFromStorage<BoardState>(STORAGE_KEYS.BOARD_STATE);
+const MIGRATIONS: Record<string, MigrationFn> = {};
+
+function migrateState(state: unknown, fromVersion: string): BoardState {
+  let current = state;
+  let version = fromVersion;
+
+  const versions = Object.keys(MIGRATIONS).sort();
+
+  for (const v of versions) {
+    if (version < v) {
+      current = MIGRATIONS[v](current);
+      version = v;
+    }
+  }
+
+  return current as BoardState;
 }
 
-export function saveBoardState(state: BoardState): void {
-  setToStorage(STORAGE_KEYS.BOARD_STATE, state);
-  setToStorage(STORAGE_KEYS.VERSION, CURRENT_VERSION);
+export function loadBoardState(): BoardState | null {
+  const raw = getFromStorage<unknown>(STORAGE_KEYS.BOARD_STATE);
+  if (!raw) return null;
+
+  const storedVersion = getFromStorage<string>(STORAGE_KEYS.VERSION) ?? '0.0.0';
+
+  if (storedVersion === CURRENT_VERSION) {
+    return raw as BoardState;
+  }
+
+  console.warn(
+    `[StorageService] Version mismatch: stored=${storedVersion}, current=${CURRENT_VERSION}. Running migration...`
+  );
+
+  try {
+    const migrated = migrateState(raw, storedVersion);
+    return migrated;
+  } catch (error) {
+    console.error('[StorageService] Migration failed, clearing storage:', error);
+    clearAllData();
+    return null;
+  }
+}
+
+export function saveBoardState(state: BoardState): boolean {
+  const stateSaved = setToStorage(STORAGE_KEYS.BOARD_STATE, state);
+  const versionSaved = setToStorage(STORAGE_KEYS.VERSION, CURRENT_VERSION);
+  return stateSaved && versionSaved;
 }
 
 export function clearAllData(): void {

@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { BoardView } from '@/components/board/BoardView';
-import { Navbar } from '@/components/layout/Navbar';
+import { BoardView } from '@/components/board/BoardView/BoardView';
 import { useBoardStore } from '@/stores/boardStore';
 import { BOARD_COLORS } from '@/types';
 import styles from './page.module.scss';
+import { Navbar } from '@/components/layout';
 
 export default function BoardPage() {
   const params  = useParams<{ id: string }>();

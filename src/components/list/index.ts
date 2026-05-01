@@ -1,1 +1,1 @@
-export { ListColumn } from './ListColumn';
+export { ListColumn } from './ListColumn/ListColumn';

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useInlineEdit } from '@/hooks/useInlineEdit';
 import { useBoardStore } from '@/stores/boardStore';
 import styles from './Navbar.module.scss';
-import { Logo } from '../ui/Logo';
+import { Logo } from '@/components/ui/Logo';
 
 interface NavbarProps {
   boardTitle?: string;

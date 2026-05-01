@@ -4,7 +4,7 @@ import React, { useState, useCallback, memo } from 'react';
 import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Plus, X, Trash2 } from 'lucide-react';
-import { CardItem } from '@/components/card/CardItem';
+import { CardItem } from '@/components/card/CardItem/CardItem';
 import { Button } from '@/components/ui/Button';
 import { useBoardStore } from '@/stores/boardStore';
 import { useInlineEdit } from '@/hooks/useInlineEdit';

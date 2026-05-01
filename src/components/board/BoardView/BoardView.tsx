@@ -13,9 +13,9 @@ import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordin
 import { createPortal } from 'react-dom';
 import { Plus, X } from 'lucide-react';
 
-import { ListColumn } from '@/components/list/ListColumn';
-import { CardItem } from '@/components/card/CardItem';
-import { CardDetailModal } from '@/components/card/CardDetailModal';
+import { ListColumn } from '@/components/list/ListColumn/ListColumn';
+import { CardItem } from '@/components/card/CardItem/CardItem';
+import { CardDetailModal } from '@/components/card/CardDetailModal/CardDetailModal';
 import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 import { useModal } from '@/hooks/useModal';
 import { useBoard } from '@/hooks/useBoard';

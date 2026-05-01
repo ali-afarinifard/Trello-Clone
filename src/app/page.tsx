@@ -2,12 +2,12 @@
 
 import React, { useMemo } from 'react';
 import { Plus } from 'lucide-react';
-import { BoardCard } from '@/components/board/BoardCard';
-import { CreateBoardModal } from '@/components/board/CreateBoardModal';
-import { Navbar } from '@/components/layout/Navbar';
+import { BoardCard } from '@/components/board/BoardCard/BoardCard';
+import { CreateBoardModal } from '@/components/board/CreateBoardModal/CreateBoardModal';
 import { useModal } from '@/hooks/useModal';
 import { useBoardStore } from '@/stores/boardStore';
 import styles from './page.module.scss';
+import { Navbar } from '@/components/layout';
 
 export default function HomePage() {
   const { isOpen, openModal, closeModal } = useModal();
