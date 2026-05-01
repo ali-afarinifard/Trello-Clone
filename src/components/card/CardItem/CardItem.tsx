@@ -1,15 +1,14 @@
-'use client';
-import React, { memo } from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { MessageSquare, AlignLeft } from 'lucide-react';
-import type { Card } from '@/types';
-import styles from './CardItem.module.scss';
+"use client";
+import React, { memo } from "react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { MessageSquare, AlignLeft } from "lucide-react";
+import type { Card } from "@/types";
+import styles from "./CardItem.module.scss";
 
 interface CardItemProps {
   card: Card;
   onOpenDetail: (cardId: string) => void;
-  onEditTitle: (cardId: string, newTitle: string) => void;
   isDragOverlay?: boolean;
 }
 
@@ -27,7 +26,7 @@ export const CardItem = memo(function CardItem({
     isDragging,
   } = useSortable({
     id: card.id,
-    data: { type: 'CARD', card },
+    data: { type: "CARD", card },
   });
 
   const style: React.CSSProperties = {
@@ -37,11 +36,11 @@ export const CardItem = memo(function CardItem({
 
   const classNames = [
     styles.card,
-    isDragging ? styles['card--dragging'] : '',
-    isDragOverlay ? styles['card--overlay'] : '',
+    isDragging ? styles["card--dragging"] : "",
+    isDragOverlay ? styles["card--overlay"] : "",
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   return (
     <div
@@ -58,7 +57,7 @@ export const CardItem = memo(function CardItem({
         tabIndex={0}
         aria-label={`Open card: ${card.title}`}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             onOpenDetail(card.id);
           }
@@ -68,7 +67,10 @@ export const CardItem = memo(function CardItem({
 
         {card.comments.length > 0 && (
           <div className={styles.badges}>
-            <span className={styles.commentBadge} title={`${card.comments.length} comment(s)`}>
+            <span
+              className={styles.commentBadge}
+              title={`${card.comments.length} comment(s)`}
+            >
               <MessageSquare size={12} />
               {card.comments.length}
             </span>
