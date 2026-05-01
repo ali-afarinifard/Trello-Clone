@@ -2,23 +2,14 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
 import type {
-  BoardState,
-  Board,
-  List,
-  Card,
-  Comment,
-  ID,
-  CreateBoardPayload,
-  UpdateBoardPayload,
-  CreateListPayload,
-  UpdateListPayload,
-  CreateCardPayload,
-  UpdateCardPayload,
+  BoardState, Board, List, Card, Comment, ID,
+  CreateBoardPayload, UpdateBoardPayload,
+  CreateListPayload, UpdateListPayload,
+  CreateCardPayload, UpdateCardPayload,
   AddCommentPayload,
 } from '@/types';
 import { generateId, now, sortByOrder } from '@/utils';
 import { loadBoardState, saveBoardState } from '@/services/storageService';
-
 
 const SEED = {
   boardId: 'seed-board-0001',
@@ -31,7 +22,6 @@ const SEED = {
   cmnt1Id: 'seed-cmnt-0001',
   seedTs:  '2025-01-01T00:00:00.000Z',
 } as const;
-
 
 const getSeedState = (): BoardState => ({
   boards: {
@@ -78,28 +68,23 @@ const getSeedState = (): BoardState => ({
 interface BoardStore extends BoardState {
   hydrateFromStorage: () => void;
 
-  // Board Actions
   createBoard: (payload: CreateBoardPayload) => Board;
   updateBoard: (payload: UpdateBoardPayload) => void;
   deleteBoard: (boardId: ID) => void;
 
-  // List Actions
   createList: (payload: CreateListPayload) => List;
   updateList: (payload: UpdateListPayload) => void;
   deleteList: (listId: ID) => void;
   reorderLists: (boardId: ID, orderedIds: ID[]) => void;
 
-  // Card Actions
   createCard: (payload: CreateCardPayload) => Card;
   updateCard: (payload: UpdateCardPayload) => void;
   moveCard: (cardId: ID, targetListId: ID, newOrder: number) => void;
   reorderCards: (listId: ID, orderedIds: ID[]) => void;
 
-  // Comment Actions
   addComment: (payload: AddCommentPayload) => void;
   deleteComment: (cardId: ID, commentId: ID) => void;
 
-  // Selectors
   getBoardLists: (boardId: ID) => List[];
   getListCards: (listId: ID) => Card[];
   getCard: (cardId: ID) => Card | undefined;
@@ -110,11 +95,14 @@ interface BoardStore extends BoardState {
 export const useBoardStore = create<BoardStore>()(
   subscribeWithSelector((set, get) => {
     const persist = (state: BoardState) => {
-      saveBoardState({
+      const saved = saveBoardState({
         boards: state.boards,
         lists: state.lists,
         cards: state.cards,
       });
+      if (!saved) {
+        console.warn('[BoardStore] Failed to persist state to localStorage.');
+      }
     };
 
     return {
@@ -151,9 +139,9 @@ export const useBoardStore = create<BoardStore>()(
           if (!existing) return state;
           const updated: Board = {
             ...existing,
-            ...(payload.title !== undefined && { title: payload.title }),
+            ...(payload.title       !== undefined && { title: payload.title }),
             ...(payload.description !== undefined && { description: payload.description }),
-            ...(payload.color !== undefined && { color: payload.color }),
+            ...(payload.color       !== undefined && { color: payload.color }),
             updatedAt: now(),
           };
           const next = { ...state, boards: { ...state.boards, [payload.id]: updated } };
@@ -271,7 +259,7 @@ export const useBoardStore = create<BoardStore>()(
           if (!existing) return state;
           const updated: Card = {
             ...existing,
-            ...(payload.title !== undefined && { title: payload.title }),
+            ...(payload.title       !== undefined && { title: payload.title }),
             ...(payload.description !== undefined && { description: payload.description }),
             updatedAt: now(),
           };
@@ -350,11 +338,9 @@ export const useBoardStore = create<BoardStore>()(
       getListCards: (listId) =>
         sortByOrder(Object.values(get().cards).filter((c) => c.listId === listId)),
 
-      getCard: (cardId) => get().cards[cardId],
-
-      getBoard: (boardId) => get().boards[boardId],
-
-      getAllBoards: () =>
+      getCard:    (cardId)  => get().cards[cardId],
+      getBoard:   (boardId) => get().boards[boardId],
+      getAllBoards: ()       =>
         Object.values(get().boards).sort(
           (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
         ),

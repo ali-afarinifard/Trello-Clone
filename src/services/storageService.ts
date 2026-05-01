@@ -44,6 +44,18 @@ export function removeFromStorage(key: string): void {
   }
 }
 
+function isValidBoardState(value: unknown): value is BoardState {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const obj = value as Record<string, unknown>;
+
+  if (typeof obj.boards !== 'object' || obj.boards === null || Array.isArray(obj.boards)) return false;
+  if (typeof obj.lists  !== 'object' || obj.lists  === null || Array.isArray(obj.lists))  return false;
+  if (typeof obj.cards  !== 'object' || obj.cards  === null || Array.isArray(obj.cards))  return false;
+
+  return true;
+}
+
 type MigrationFn = (old: unknown) => BoardState;
 
 const MIGRATIONS: Record<string, MigrationFn> = {};
@@ -52,9 +64,7 @@ function migrateState(state: unknown, fromVersion: string): BoardState {
   let current = state;
   let version = fromVersion;
 
-  const versions = Object.keys(MIGRATIONS).sort();
-
-  for (const v of versions) {
+  for (const v of Object.keys(MIGRATIONS).sort()) {
     if (version < v) {
       current = MIGRATIONS[v](current);
       version = v;
@@ -70,19 +80,25 @@ export function loadBoardState(): BoardState | null {
 
   const storedVersion = getFromStorage<string>(STORAGE_KEYS.VERSION) ?? '0.0.0';
 
-  if (storedVersion === CURRENT_VERSION) {
-    return raw as BoardState;
-  }
-
-  console.warn(
-    `[StorageService] Version mismatch: stored=${storedVersion}, current=${CURRENT_VERSION}. Running migration...`
-  );
-
   try {
-    const migrated = migrateState(raw, storedVersion);
-    return migrated;
+    const data = storedVersion === CURRENT_VERSION
+      ? raw
+      : (() => {
+          console.warn(
+            `[StorageService] Version mismatch: stored=${storedVersion}, current=${CURRENT_VERSION}. Running migration...`
+          );
+          return migrateState(raw, storedVersion);
+        })();
+
+    if (!isValidBoardState(data)) {
+      console.error('[StorageService] Invalid BoardState shape, clearing storage.');
+      clearAllData();
+      return null;
+    }
+
+    return data;
   } catch (error) {
-    console.error('[StorageService] Migration failed, clearing storage:', error);
+    console.error('[StorageService] Failed to load board state, clearing storage:', error);
     clearAllData();
     return null;
   }
