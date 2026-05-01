@@ -2,11 +2,11 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
 import type {
-  BoardState, Board, List, Card, Comment, ID,
-  CreateBoardPayload, UpdateBoardPayload,
-  CreateListPayload, UpdateListPayload,
-  CreateCardPayload, UpdateCardPayload,
-  AddCommentPayload,
+  IBoardState, IBoard, IList, ICard, IComment, ID,
+  ICreateBoardPayload, IUpdateBoardPayload,
+  ICreateListPayload, IUpdateListPayload,
+  ICreateCardPayload, IUpdateCardPayload,
+  IAddCommentPayload,
 } from '@/types';
 import { generateId, now, sortByOrder } from '@/utils';
 import { loadBoardState, saveBoardState } from '@/services/storageService';
@@ -23,7 +23,7 @@ const SEED = {
   seedTs:  '2025-01-01T00:00:00.000Z',
 } as const;
 
-const getSeedState = (): BoardState => ({
+const getSeedState = (): IBoardState => ({
   boards: {
     [SEED.boardId]: {
       id: SEED.boardId,
@@ -65,36 +65,36 @@ const getSeedState = (): BoardState => ({
   },
 });
 
-interface BoardStore extends BoardState {
+interface IBoardStore extends IBoardState {
   hydrateFromStorage: () => void;
 
-  createBoard: (payload: CreateBoardPayload) => Board;
-  updateBoard: (payload: UpdateBoardPayload) => void;
+  createBoard: (payload: ICreateBoardPayload) => IBoard;
+  updateBoard: (payload: IUpdateBoardPayload) => void;
   deleteBoard: (boardId: ID) => void;
 
-  createList: (payload: CreateListPayload) => List;
-  updateList: (payload: UpdateListPayload) => void;
+  createList: (payload: ICreateListPayload) => IList;
+  updateList: (payload: IUpdateListPayload) => void;
   deleteList: (listId: ID) => void;
   reorderLists: (boardId: ID, orderedIds: ID[]) => void;
 
-  createCard: (payload: CreateCardPayload) => Card;
-  updateCard: (payload: UpdateCardPayload) => void;
+  createCard: (payload: ICreateCardPayload) => ICard;
+  updateCard: (payload: IUpdateCardPayload) => void;
   moveCard: (cardId: ID, targetListId: ID, newOrder: number) => void;
   reorderCards: (listId: ID, orderedIds: ID[]) => void;
 
-  addComment: (payload: AddCommentPayload) => void;
+  addComment: (payload: IAddCommentPayload) => void;
   deleteComment: (cardId: ID, commentId: ID) => void;
 
-  getBoardLists: (boardId: ID) => List[];
-  getListCards: (listId: ID) => Card[];
-  getCard: (cardId: ID) => Card | undefined;
-  getBoard: (boardId: ID) => Board | undefined;
-  getAllBoards: () => Board[];
+  getBoardLists: (boardId: ID) => IList[];
+  getListCards: (listId: ID) => ICard[];
+  getCard: (cardId: ID) => ICard | undefined;
+  getBoard: (boardId: ID) => IBoard | undefined;
+  getAllBoards: () => IBoard[];
 }
 
-export const useBoardStore = create<BoardStore>()(
+export const useBoardStore = create<IBoardStore>()(
   subscribeWithSelector((set, get) => {
-    const persist = (state: BoardState) => {
+    const persist = (state: IBoardState) => {
       const saved = saveBoardState({
         boards: state.boards,
         lists: state.lists,
@@ -117,7 +117,7 @@ export const useBoardStore = create<BoardStore>()(
 
       // BOARD ACTIONS
       createBoard: (payload) => {
-        const board: Board = {
+        const board: IBoard = {
           id: generateId(),
           title: payload.title,
           description: payload.description ?? '',
@@ -137,7 +137,7 @@ export const useBoardStore = create<BoardStore>()(
         set((state) => {
           const existing = state.boards[payload.id];
           if (!existing) return state;
-          const updated: Board = {
+          const updated: IBoard = {
             ...existing,
             ...(payload.title       !== undefined && { title: payload.title }),
             ...(payload.description !== undefined && { description: payload.description }),
@@ -171,7 +171,7 @@ export const useBoardStore = create<BoardStore>()(
         const existingCount = Object.values(get().lists).filter(
           (l) => l.boardId === payload.boardId
         ).length;
-        const list: List = {
+        const list: IList = {
           id: generateId(),
           title: payload.title,
           boardId: payload.boardId,
@@ -191,7 +191,7 @@ export const useBoardStore = create<BoardStore>()(
         set((state) => {
           const existing = state.lists[payload.id];
           if (!existing) return state;
-          const updated: List = {
+          const updated: IList = {
             ...existing,
             ...(payload.title !== undefined && { title: payload.title }),
             updatedAt: now(),
@@ -234,7 +234,7 @@ export const useBoardStore = create<BoardStore>()(
         const existingCount = Object.values(get().cards).filter(
           (c) => c.listId === payload.listId
         ).length;
-        const card: Card = {
+        const card: ICard = {
           id: generateId(),
           title: payload.title,
           description: payload.description ?? '',
@@ -257,7 +257,7 @@ export const useBoardStore = create<BoardStore>()(
         set((state) => {
           const existing = state.cards[payload.id];
           if (!existing) return state;
-          const updated: Card = {
+          const updated: ICard = {
             ...existing,
             ...(payload.title       !== undefined && { title: payload.title }),
             ...(payload.description !== undefined && { description: payload.description }),
@@ -273,7 +273,7 @@ export const useBoardStore = create<BoardStore>()(
         set((state) => {
           const card = state.cards[cardId];
           if (!card) return state;
-          const updated: Card = { ...card, listId: targetListId, order: newOrder, updatedAt: now() };
+          const updated: ICard = { ...card, listId: targetListId, order: newOrder, updatedAt: now() };
           const next = { ...state, cards: { ...state.cards, [cardId]: updated } };
           persist(next);
           return next;
@@ -296,7 +296,7 @@ export const useBoardStore = create<BoardStore>()(
 
       // COMMENT ACTIONS
       addComment: (payload) => {
-        const comment: Comment = {
+        const comment: IComment = {
           id: generateId(),
           text: payload.text,
           author: payload.author ?? 'You',
@@ -305,7 +305,7 @@ export const useBoardStore = create<BoardStore>()(
         set((state) => {
           const card = state.cards[payload.cardId];
           if (!card) return state;
-          const updatedCard: Card = {
+          const updatedCard: ICard = {
             ...card,
             comments: [...card.comments, comment],
             updatedAt: now(),
@@ -320,7 +320,7 @@ export const useBoardStore = create<BoardStore>()(
         set((state) => {
           const card = state.cards[cardId];
           if (!card) return state;
-          const updatedCard: Card = {
+          const updatedCard: ICard = {
             ...card,
             comments: card.comments.filter((c) => c.id !== commentId),
             updatedAt: now(),

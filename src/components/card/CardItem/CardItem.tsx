@@ -3,11 +3,11 @@ import React, { memo, useCallback } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MessageSquare, AlignLeft } from "lucide-react";
-import type { Card } from "@/types";
+import type { ICard } from "@/types";
 import styles from "./CardItem.module.scss";
 
-interface CardItemProps {
-  card: Card;
+interface ICardItemProps {
+  card: ICard;
   onOpenDetail: (cardId: string) => void;
   isDragOverlay?: boolean;
 }
@@ -16,7 +16,7 @@ export const CardItem = memo(function CardItem({
   card,
   onOpenDetail,
   isDragOverlay = false,
-}: CardItemProps) {
+}: ICardItemProps) {
   const {
     attributes,
     listeners,

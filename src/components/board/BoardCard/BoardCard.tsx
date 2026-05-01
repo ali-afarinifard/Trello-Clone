@@ -2,12 +2,12 @@
 import React, { memo, useCallback } from "react";
 import Link from "next/link";
 import { X, LayoutList, AlignLeft } from "lucide-react";
-import type { Board } from "@/types";
+import type { IBoard } from "@/types";
 import { BOARD_COLORS } from "@/types";
 import styles from "./BoardCard.module.scss";
 
-interface BoardCardProps {
-  board: Board;
+interface IBoardCardProps {
+  board: IBoard;
   cardCount: number;
   listCount: number;
   onDelete: (boardId: string) => void;
@@ -23,7 +23,7 @@ export const BoardCard = memo(function BoardCard({
   cardCount,
   listCount,
   onDelete,
-}: BoardCardProps) {
+}: IBoardCardProps) {
   const handleDelete = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();

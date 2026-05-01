@@ -6,12 +6,12 @@ import { useBoardStore } from '@/stores/boardStore';
 import styles from './Navbar.module.scss';
 import { Logo } from '@/components/ui/Logo';
 
-interface NavbarProps {
+interface INavbarProps {
   boardTitle?: string;
   boardId?:    string;
 }
 
-export function Navbar({ boardTitle, boardId }: NavbarProps) {
+export function Navbar({ boardTitle, boardId }: INavbarProps) {
   const updateBoard = useBoardStore((s) => s.updateBoard);
 
   const {

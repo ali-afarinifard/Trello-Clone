@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { ID } from '@/types';
 
-interface UseModalReturn {
+interface IUseModalReturn {
   isOpen: boolean;
   selectedId: ID | null;
   openModal: (id?: ID) => void;
@@ -9,8 +9,8 @@ interface UseModalReturn {
   toggleModal: () => void;
 }
 
-export function useModal(): UseModalReturn {
-  const [isOpen, setIsOpen] = useState(false);
+export function useModal(): IUseModalReturn {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<ID | null>(null);
 
   const openModal = useCallback((id?: ID) => {

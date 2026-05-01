@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { Card, List } from '@/types';
+import type { ICard, IList } from '@/types';
 
 
 export const generateId = (): string => uuidv4();
@@ -55,9 +55,9 @@ export const moveBetweenArrays = <T>(
 export const sortByOrder = <T extends { order: number }>(items: T[]): T[] =>
   [...items].sort((a, b) => a.order - b.order);
 
-export const getSortedCards = (cards: Card[]): Card[] => sortByOrder(cards);
+export const getSortedCards = (cards: ICard[]): ICard[] => sortByOrder(cards);
 
-export const getSortedLists = (lists: List[]): List[] => sortByOrder(lists);
+export const getSortedLists = (lists: IList[]): IList[] => sortByOrder(lists);
 
 // Normalization Helpers
 

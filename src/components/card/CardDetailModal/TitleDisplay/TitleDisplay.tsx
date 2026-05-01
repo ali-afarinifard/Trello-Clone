@@ -2,7 +2,7 @@
 import React, { memo, useCallback } from "react";
 import styles from "../CardDetailModal.module.scss";
 
-interface TitleDisplayProps {
+interface ITitleDisplayProps {
   title: string;
   onStartEditing: () => void;
 }
@@ -10,7 +10,7 @@ interface TitleDisplayProps {
 export const TitleDisplay = memo(function TitleDisplay({
   title,
   onStartEditing,
-}: TitleDisplayProps) {
+}: ITitleDisplayProps) {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Enter") onStartEditing();

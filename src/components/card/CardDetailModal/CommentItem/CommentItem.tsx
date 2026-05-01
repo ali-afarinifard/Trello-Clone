@@ -4,7 +4,7 @@ import { timeAgo, formatDate } from "@/utils";
 import type { ID } from "@/types";
 import styles from "../CardDetailModal.module.scss";
 
-interface CommentItemProps {
+interface ICommentItemProps {
   comment: { id: string; text: string; author: string; createdAt: string };
   cardId: ID;
   onDelete: (cardId: ID, commentId: ID) => void;
@@ -14,7 +14,7 @@ export const CommentItem = memo(function CommentItem({
   comment,
   cardId,
   onDelete,
-}: CommentItemProps) {
+}: ICommentItemProps) {
   const handleDelete = useCallback(() => {
     onDelete(cardId, comment.id);
   }, [cardId, comment.id, onDelete]);

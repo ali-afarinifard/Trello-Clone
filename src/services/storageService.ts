@@ -1,4 +1,4 @@
-import type { BoardState } from '@/types';
+import type { IBoardState } from '@/types';
 
 const STORAGE_KEYS = {
   BOARD_STATE: 'trello_clone_board_state',
@@ -44,7 +44,7 @@ export function removeFromStorage(key: string): void {
   }
 }
 
-function isValidBoardState(value: unknown): value is BoardState {
+function isValidBoardState(value: unknown): value is IBoardState {
   if (typeof value !== 'object' || value === null) return false;
 
   const obj = value as Record<string, unknown>;
@@ -56,11 +56,11 @@ function isValidBoardState(value: unknown): value is BoardState {
   return true;
 }
 
-type MigrationFn = (old: unknown) => BoardState;
+type MigrationFn = (old: unknown) => IBoardState;
 
 const MIGRATIONS: Record<string, MigrationFn> = {};
 
-function migrateState(state: unknown, fromVersion: string): BoardState {
+function migrateState(state: unknown, fromVersion: string): IBoardState {
   let current = state;
   let version = fromVersion;
 
@@ -71,10 +71,10 @@ function migrateState(state: unknown, fromVersion: string): BoardState {
     }
   }
 
-  return current as BoardState;
+  return current as IBoardState;
 }
 
-export function loadBoardState(): BoardState | null {
+export function loadBoardState(): IBoardState | null {
   const raw = getFromStorage<unknown>(STORAGE_KEYS.BOARD_STATE);
   if (!raw) return null;
 
@@ -104,7 +104,7 @@ export function loadBoardState(): BoardState | null {
   }
 }
 
-export function saveBoardState(state: BoardState): boolean {
+export function saveBoardState(state: IBoardState): boolean {
   const stateSaved = setToStorage(STORAGE_KEYS.BOARD_STATE, state);
   const versionSaved = setToStorage(STORAGE_KEYS.VERSION, CURRENT_VERSION);
   return stateSaved && versionSaved;

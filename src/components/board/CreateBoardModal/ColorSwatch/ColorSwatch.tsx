@@ -3,7 +3,7 @@ import React, { memo, useCallback } from "react";
 import type { BoardColorKey } from "@/types";
 import styles from "../CreateBoardModal.module.scss";
 
-interface ColorSwatchProps {
+interface IColorSwatchProps {
   colorKey: BoardColorKey;
   colorValue: string;
   isSelected: boolean;
@@ -15,7 +15,7 @@ export const ColorSwatch = memo(function ColorSwatch({
   colorValue,
   isSelected,
   onSelect,
-}: ColorSwatchProps) {
+}: IColorSwatchProps) {
   const handleClick = useCallback(
     () => onSelect(colorKey),
     [colorKey, onSelect],

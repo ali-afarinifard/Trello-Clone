@@ -18,13 +18,13 @@ import { useBoardStore }   from '@/stores/boardStore';
 import type { ID } from '@/types';
 import styles from './BoardView.module.scss';
 
-interface AddListFormProps {
+interface IAddListFormProps {
   boardId: ID;
 }
 
 const NOOP = () => {};
 
-function AddListForm({ boardId }: AddListFormProps) {
+function AddListForm({ boardId }: IAddListFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [title,  setTitle]  = useState('');
   const createList = useBoardStore((state) => state.createList);
@@ -91,11 +91,11 @@ function AddListForm({ boardId }: AddListFormProps) {
   );
 }
 
-interface BoardViewProps {
+interface IBoardViewProps {
   boardId: ID;
 }
 
-export function BoardView({ boardId }: BoardViewProps) {
+export function BoardView({ boardId }: IBoardViewProps) {
   const { listsWithCards } = useBoard(boardId);
   const cards = useBoardStore((state) => state.cards);
 

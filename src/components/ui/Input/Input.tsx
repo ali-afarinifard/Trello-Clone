@@ -1,13 +1,13 @@
 import React, { forwardRef, useId } from 'react';
 import styles from './Input.module.scss';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   hint?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
+export const Input = forwardRef<HTMLInputElement, IInputProps>(
   ({ label, error, hint, className = '', id, ...rest }, ref) => {
     const generatedId = useId();
     const inputId = id ?? generatedId;

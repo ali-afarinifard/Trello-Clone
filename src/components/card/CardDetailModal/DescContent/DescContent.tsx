@@ -2,7 +2,7 @@
 import React, { memo, useCallback } from "react";
 import styles from "../CardDetailModal.module.scss";
 
-interface DescContentProps {
+interface IDescContentProps {
   description: string | undefined;
   onStartEditing: () => void;
 }
@@ -10,7 +10,7 @@ interface DescContentProps {
 export const DescContent = memo(function DescContent({
   description,
   onStartEditing,
-}: DescContentProps) {
+}: IDescContentProps) {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Enter") onStartEditing();

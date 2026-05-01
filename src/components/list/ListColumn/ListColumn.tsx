@@ -11,12 +11,12 @@ import { CardItem } from "@/components/card/CardItem/CardItem";
 import { Button } from "@/components/ui/Button";
 import { useBoardStore } from "@/stores/boardStore";
 import { useInlineEdit } from "@/hooks/useInlineEdit";
-import type { List, Card } from "@/types";
+import type { IList, ICard } from "@/types";
 import styles from "./ListColumn.module.scss";
 
-interface ListColumnProps {
-  list: List;
-  cards: Card[];
+interface IListColumnProps {
+  list: IList;
+  cards: ICard[];
   onOpenCardDetail: (cardId: string) => void;
   isDragOverlay?: boolean;
 }
@@ -26,7 +26,7 @@ export const ListColumn = memo(function ListColumn({
   cards,
   onOpenCardDetail,
   isDragOverlay = false,
-}: ListColumnProps) {
+}: IListColumnProps) {
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
 

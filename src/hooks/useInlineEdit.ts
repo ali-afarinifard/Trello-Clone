@@ -1,12 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
-interface UseInlineEditOptions {
+interface IUseInlineEditOptions {
   initialValue: string;
   onSave: (value: string) => void;
   minLength?: number;
 }
 
-interface UseInlineEditReturn {
+interface IUseInlineEditReturn {
   isEditing: boolean;
   value: string;
   inputRef: React.RefObject<HTMLInputElement | HTMLTextAreaElement>;
@@ -21,7 +21,7 @@ export function useInlineEdit({
   initialValue,
   onSave,
   minLength = 1,
-}: UseInlineEditOptions): UseInlineEditReturn {
+}: IUseInlineEditOptions): IUseInlineEditReturn {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);

@@ -1,4 +1,3 @@
-// CreateBoardModal/CreateBoardModal.tsx
 'use client';
 import React, { useState, useCallback } from 'react';
 import { Modal }         from '@/components/ui/Modal';
@@ -10,13 +9,13 @@ import type { BoardColorKey } from '@/types';
 import styles from './CreateBoardModal.module.scss';
 import { ColorSwatch } from './ColorSwatch/ColorSwatch';
 
-interface CreateBoardModalProps {
+interface ICreateBoardModalProps {
   isOpen:     boolean;
   onClose:    () => void;
   onCreated?: (boardId: string) => void;
 }
 
-export function CreateBoardModal({ isOpen, onClose, onCreated }: CreateBoardModalProps) {
+export function CreateBoardModal({ isOpen, onClose, onCreated }: ICreateBoardModalProps) {
   const [title,         setTitle]         = useState('');
   const [description,   setDescription]   = useState('');
   const [selectedColor, setSelectedColor] = useState<BoardColorKey>('ocean');

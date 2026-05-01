@@ -12,7 +12,7 @@ import { TitleDisplay } from "./TitleDisplay/TitleDisplay";
 import { DescContent } from "./DescContent/DescContent";
 import { CommentItem } from "./CommentItem/CommentItem";
 
-interface CardDetailModalProps {
+interface ICardDetailModalProps {
   cardId: ID | null;
   isOpen: boolean;
   onClose: () => void;
@@ -22,7 +22,7 @@ export function CardDetailModal({
   cardId,
   isOpen,
   onClose,
-}: CardDetailModalProps) {
+}: ICardDetailModalProps) {
   const card = useBoardStore((s) => (cardId ? s.cards[cardId] : undefined));
   const lists = useBoardStore((s) => s.lists);
   const updateCard = useBoardStore((s) => s.updateCard);

@@ -1,7 +1,7 @@
 export type ID = string;
 
 // Comment
-export interface Comment {
+export interface IComment {
   id: ID;
   text: string;
   author: string;
@@ -9,20 +9,20 @@ export interface Comment {
 }
 
 // Card
-export interface Card {
+export interface ICard {
   id: ID;
   title: string;
   description: string;
   listId: ID;
   boardId: ID;
   order: number;
-  comments: Comment[];
+  comments: IComment[];
   createdAt: string;
   updatedAt: string;
 }
 
 // List
-export interface List {
+export interface IList {
   id: ID;
   title: string;
   boardId: ID;
@@ -32,7 +32,7 @@ export interface List {
 }
 
 // Board
-export interface Board {
+export interface IBoard {
   id: ID;
   title: string;
   description: string;
@@ -43,59 +43,59 @@ export interface Board {
 
 // Normalized State Shape
 // Using normalized state for O(1) lookups (performance best practice)
-export interface BoardState {
-  boards: Record<ID, Board>;
-  lists: Record<ID, List>;
-  cards: Record<ID, Card>;
+export interface IBoardState {
+  boards: Record<ID, IBoard>;
+  lists: Record<ID, IList>;
+  cards: Record<ID, ICard>;
 }
 
 // Computed Types
-export interface ListWithCards extends List {
-  cards: Card[];
+export interface IListWithCards extends IList {
+  cards: ICard[];
 }
 
-export interface BoardWithLists extends Board {
-  lists: ListWithCards[];
+export interface IBoardWithLists extends IBoard {
+  lists: IListWithCards[];
 }
 
 // Action Payloads
-export interface CreateBoardPayload {
+export interface ICreateBoardPayload {
   title: string;
   description?: string;
   color?: string;
 }
 
-export interface UpdateBoardPayload {
+export interface IUpdateBoardPayload {
   id: ID;
   title?: string;
   description?: string;
   color?: string;
 }
 
-export interface CreateListPayload {
+export interface ICreateListPayload {
   title: string;
   boardId: ID;
 }
 
-export interface UpdateListPayload {
+export interface IUpdateListPayload {
   id: ID;
   title?: string;
 }
 
-export interface CreateCardPayload {
+export interface ICreateCardPayload {
   title: string;
   listId: ID;
   boardId: ID;
   description?: string;
 }
 
-export interface UpdateCardPayload {
+export interface IUpdateCardPayload {
   id: ID;
   title?: string;
   description?: string;
 }
 
-export interface AddCommentPayload {
+export interface IAddCommentPayload {
   cardId: ID;
   text: string;
   author?: string;
@@ -104,7 +104,7 @@ export interface AddCommentPayload {
 // DnD Types
 export type DragItemType = 'CARD' | 'LIST';
 
-export interface DragEndResult {
+export interface IDragEndResult {
   draggableId: ID;
   type: DragItemType;
   source: {
@@ -118,7 +118,7 @@ export interface DragEndResult {
 }
 
 // UI State Types
-export interface ModalState {
+export interface IModalState {
   isOpen: boolean;
   cardId: ID | null;
 }

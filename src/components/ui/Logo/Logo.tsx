@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface LogoProps {
+interface ILogoProps {
   size?: number;
   className?: string;
 }
 
-export function Logo({ size = 20, className }: LogoProps) {
+export function Logo({ size = 20, className }: ILogoProps) {
   return (
     <svg
       width={size}

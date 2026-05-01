@@ -10,21 +10,21 @@ import type { ID } from "@/types";
 
 type DragType = "CARD" | "LIST" | null;
 
-interface ActiveDragState {
+interface IActiveDragState {
   id: ID;
   type: DragType;
 }
 
-interface UseDragAndDropReturn {
-  activeDrag: ActiveDragState | null;
+interface IUseDragAndDropReturn {
+  activeDrag: IActiveDragState | null;
   handleDragStart: (event: DragStartEvent) => void;
   handleDragOver: (event: DragOverEvent) => void;
   handleDragEnd: (event: DragEndEvent) => void;
   handleDragCancel: () => void;
 }
 
-export function useDragAndDrop(boardId: ID): UseDragAndDropReturn {
-  const [activeDrag, setActiveDrag] = useState<ActiveDragState | null>(null);
+export function useDragAndDrop(boardId: ID): IUseDragAndDropReturn {
+  const [activeDrag, setActiveDrag] = useState<IActiveDragState | null>(null);
 
   const getBoardLists = useBoardStore((state) => state.getBoardLists);
   const getListCards = useBoardStore((state) => state.getListCards);
