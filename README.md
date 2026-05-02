@@ -41,77 +41,6 @@ npm run dev
 # Open http://localhost:3000
 ```
 
----
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── layout.tsx                    # Root layout + StoreHydration
-│   ├── page.tsx                      # Boards list (home)
-│   ├── page.module.scss
-│   └── board/[id]/
-│       ├── page.tsx                  # Single board view
-│       └── page.module.scss
-├── components/
-│   ├── ui/                           # Reusable base components (folder-per-component)
-│   │   ├── Button/
-│   │   │   ├── Button.tsx
-│   │   │   ├── Button.module.scss
-│   │   │   └── index.ts
-│   │   ├── Input/
-│   │   │   ├── Input.tsx
-│   │   │   ├── Input.module.scss
-│   │   │   └── index.ts
-│   │   └── Modal/
-│   │       ├── Modal.tsx
-│   │       ├── Modal.module.scss
-│   │       └── index.ts
-│   ├── board/
-│   │   ├── BoardCard.tsx
-│   │   ├── BoardCard.module.scss
-│   │   ├── BoardView.tsx
-│   │   ├── BoardView.module.scss
-│   │   ├── CreateBoardModal.tsx
-│   │   ├── CreateBoardModal.module.scss
-│   │   └── index.ts
-│   ├── list/
-│   │   ├── ListColumn.tsx
-│   │   ├── ListColumn.module.scss
-│   │   └── index.ts
-│   ├── card/
-│   │   ├── CardItem.tsx
-│   │   ├── CardItem.module.scss
-│   │   ├── CardDetailModal.tsx
-│   │   ├── CardDetailModal.module.scss
-│   │   └── index.ts
-│   ├── layout/
-│   │   ├── Navbar.tsx
-│   │   ├── Navbar.module.scss
-│   │   └── index.ts
-│   └── storeHydration/
-│       └── StoreHydration.tsx        # SSR-safe localStorage loader
-├── hooks/
-│   ├── useBoard.ts                   # Board derived state
-│   ├── useDragAndDrop.ts             # All DnD logic
-│   ├── useModal.ts                   # Modal state management
-│   └── useInlineEdit.ts              # Inline text editing
-├── stores/
-│   └── boardStore.ts                 # Zustand store (single source of truth)
-├── services/
-│   └── storageService.ts             # localStorage abstraction
-├── types/
-│   └── index.ts                      # All TypeScript interfaces
-├── utils/
-│   └── index.ts                      # Pure utility functions
-└── styles/
-    ├── _variables.scss               # Design tokens
-    ├── _mixins.scss                  # Reusable patterns
-    ├── _reset.scss                   # CSS reset
-    └── globals.scss                  # Global styles
-```
-
 `ui/` components use a **folder-per-component** pattern (component + styles + barrel export). Other components colocate `.tsx` and `.module.scss` in their category folder.
 
 ---
@@ -119,8 +48,6 @@ src/
 ## Architecture
 
 ### Normalized State
-
-The Zustand store uses `Record<ID, Entity>` instead of arrays, enabling O(1) lookups on every read:
 
 ```ts
 // No .find() loops — direct access
