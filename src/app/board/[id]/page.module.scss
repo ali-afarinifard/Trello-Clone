@@ -8,6 +8,10 @@
   background-attachment: fixed;
 }
 
+.page--notFound {
+  background: $color-bg-dark;
+}
+
 .notFound {
   @include flex-center;
   flex-direction: column;

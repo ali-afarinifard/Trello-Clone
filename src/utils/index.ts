@@ -70,3 +70,19 @@ export const toRecord = <T extends { id: string }>(items: T[]): Record<string, T
 // Truncation
 export const truncate = (str: string, maxLength: number): string =>
   str.length > maxLength ? `${str.slice(0, maxLength)}…` : str;
+
+
+// logger
+const isDev = process.env.NODE_ENV === 'development';
+
+export const logger = {
+  error: (message: string, ...args: unknown[]): void => {
+    if (isDev) console.error(message, ...args);
+  },
+  warn: (message: string, ...args: unknown[]): void => {
+    if (isDev) console.warn(message, ...args);
+  },
+  info: (message: string, ...args: unknown[]): void => {
+    if (isDev) console.info(message, ...args);
+  },
+} as const;

@@ -1,4 +1,5 @@
 import type { IBoardState } from '@/types';
+import { logger } from '@/utils';
 
 const STORAGE_KEYS = {
   BOARD_STATE: 'trello_clone_board_state',
@@ -17,7 +18,7 @@ export function getFromStorage<T>(key: string): T | null {
     if (serialized === null) return null;
     return JSON.parse(serialized) as T;
   } catch (error) {
-    console.error(`[StorageService] Failed to read key "${key}":`, error);
+    logger.error(`[StorageService] Failed to read key "${key}":`, error);
     return null;
   }
 }
@@ -30,7 +31,7 @@ export function setToStorage<T>(key: string, value: T): boolean {
     window.localStorage.setItem(key, serialized);
     return true;
   } catch (error) {
-    console.error(`[StorageService] Failed to write key "${key}":`, error);
+    logger.error(`[StorageService] Failed to write key "${key}":`, error);
     return false;
   }
 }
@@ -40,7 +41,7 @@ export function removeFromStorage(key: string): void {
   try {
     window.localStorage.removeItem(key);
   } catch (error) {
-    console.error(`[StorageService] Failed to remove key "${key}":`, error);
+    logger.error(`[StorageService] Failed to remove key "${key}":`, error);
   }
 }
 
@@ -84,28 +85,28 @@ export function loadBoardState(): IBoardState | null {
     const data = storedVersion === CURRENT_VERSION
       ? raw
       : (() => {
-          console.warn(
+          logger.warn(
             `[StorageService] Version mismatch: stored=${storedVersion}, current=${CURRENT_VERSION}. Running migration...`
           );
           return migrateState(raw, storedVersion);
         })();
 
     if (!isValidBoardState(data)) {
-      console.error('[StorageService] Invalid BoardState shape, clearing storage.');
+      logger.error('[StorageService] Invalid BoardState shape, clearing storage.');
       clearAllData();
       return null;
     }
 
     return data;
   } catch (error) {
-    console.error('[StorageService] Failed to load board state, clearing storage:', error);
+    logger.error('[StorageService] Failed to load board state, clearing storage:', error);
     clearAllData();
     return null;
   }
 }
 
 export function saveBoardState(state: IBoardState): boolean {
-  const stateSaved = setToStorage(STORAGE_KEYS.BOARD_STATE, state);
+  const stateSaved   = setToStorage(STORAGE_KEYS.BOARD_STATE, state);
   const versionSaved = setToStorage(STORAGE_KEYS.VERSION, CURRENT_VERSION);
   return stateSaved && versionSaved;
 }
