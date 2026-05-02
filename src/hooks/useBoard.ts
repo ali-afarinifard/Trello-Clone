@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useBoardStore } from '@/stores/boardStore';
-import type { IBoardWithLists, ID } from '@/types';
+import type { IBoard, IBoardWithLists, ID } from '@/types';
 import { sortByOrder } from '@/utils';
 
 interface IUseBoardReturn {
-  board: ReturnType<typeof useBoardStore.getState>['boards'][string] | undefined;
+  board: IBoard | undefined;
   listsWithCards: IBoardWithLists['lists'];
   listCount: number;
   cardCount: number;
