@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "@/styles/globals.scss";
 import { StoreHydration } from "@/components/storeHydration/StoreHydration";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +23,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <StoreHydration />
-        <ErrorBoundary>{children}</ErrorBoundary>
+        <ErrorBoundary>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </ErrorBoundary>
       </body>
     </html>
   );
