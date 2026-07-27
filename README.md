@@ -2,6 +2,8 @@
 
 A professional Trello-like project management app built with modern web technologies.
 
+🔗 **[Live Demo](https://trello-clone-platform-app.vercel.app)**
+
 ## Tech Stack
 
 | Technology | Purpose |
@@ -97,11 +99,11 @@ _mixins.scss     →  reusable patterns (flex helpers, breakpoints, text-ellipsi
 _reset.scss      →  baseline normalization
 ```
 
-`sassOptions.includePaths` in `next.config.js` allows any component to import partials without relative path traversal:
+Next.js automatically resolves the `@/*` path alias defined in `tsconfig.json` for Sass imports too, so components can import partials without relative path traversal — no extra Sass configuration is needed:
 
 ```scss
-@use '@/styles/variables' as v;
-@use '@/styles/mixins'   as m;
+@import '@/styles/variables';
+@import '@/styles/mixins';
 ```
 
 ---
@@ -123,6 +125,22 @@ Everything this project requires — Server Components, Client Components, dynam
 
 ---
 
+## 👨‍💻 About the Developer
+
+Built and maintained by **[Ali Afarinifard]**, a Frontend Developer specializing in React/Next.js and scalable, type-safe UI architecture.
+
+- LinkedIn: [linkedin.com/in/ali-afarinifard](https://www.linkedin.com/in/ali-afarinifard)
+- GitHub: [@ali-afarinifard](https://github.com/ali-afarinifard)
+- Email: a.afarinifard10@email.com
+
+---
+
+## 🚢 Deployment
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ali-afarinifard/Trello-Clone)
+
+---
+
 ## License
 
-MIT
+This project is licensed under the [MIT License](./LICENSE).
